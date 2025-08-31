@@ -5,25 +5,17 @@
  * @format
  */
 
-import { StyleSheet, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { StatusBar } from 'react-native';
+import Routes from './src/routes';
 
 function App() {
-
   return (
-    <View style={styles.container}>
-      <Text>Valentim</Text>
-    </View>
+    <NavigationContainer>
+      <StatusBar backgroundColor="#F0F4FF" barStyle="dark-content" />
+      <Routes />
+    </NavigationContainer>
   );
 }
-
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-});
 
 export default App;
