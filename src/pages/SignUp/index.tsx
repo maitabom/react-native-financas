@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
   AreaInput,
   Background,
@@ -6,8 +7,15 @@ import {
   SubmitButton,
   SubmitText,
 } from './styles';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function SignUp() {
+  const user = useContext(AuthContext);
+
+  function handledSignUp() {
+    console.log(user);
+  }
+
   return (
     <Background>
       <Container behavior="padding" enabled>
@@ -23,7 +31,7 @@ export default function SignUp() {
           <Input placeholder="Sua senha" />
         </AreaInput>
 
-        <SubmitButton>
+        <SubmitButton activeOpacity={0.8} onPress={handledSignUp}>
           <SubmitText>Cadastrar</SubmitText>
         </SubmitButton>
       </Container>
