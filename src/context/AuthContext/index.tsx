@@ -5,20 +5,23 @@ import api from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
 
 export const AuthContext = createContext<AuthContextProperties>({
-  user: { name: '' },
+  user: undefined,
+  loadingAuth: false,
   signUp: async () => {},
 });
 
 function AuthProvider({ children }: AuthProviderProperties) {
-  const [user, setUser] = useState<User>({
-    name: 'Valentim',
-  });
+  const [user, setUser] = useState<User | undefined>(undefined);
+  const [loadingAuth, setLoadingAuth] = useState(false);
 
   const navigation = useNavigation();
 
   async function signUp(name: string, email: string, password: string) {
     try {
+      setLoadingAuth(true);
       const response = await api.post('/users', { name, password, email });
+
+      setLoadingAuth(false);
 
       if (response.status === 200 || response.status === 201) {
         navigation.goBack();
@@ -27,11 +30,12 @@ function AuthProvider({ children }: AuthProviderProperties) {
       }
     } catch (error) {
       console.error(error);
+      setLoadingAuth(false);
     }
   }
 
   return (
-    <AuthContext.Provider value={{ user, signUp }}>
+    <AuthContext.Provider value={{ user, loadingAuth, signUp }}>
       {children}
     </AuthContext.Provider>
   );
