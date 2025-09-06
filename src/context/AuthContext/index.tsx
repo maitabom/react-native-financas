@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export const AuthContext = createContext<AuthContextProperties>({
   user: undefined,
+  signed: false,
   loadingAuth: false,
   signUp: async () => {},
 });
@@ -35,7 +36,7 @@ function AuthProvider({ children }: AuthProviderProperties) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loadingAuth, signUp }}>
+    <AuthContext.Provider value={{ signed: !!user, user, loadingAuth, signUp }}>
       {children}
     </AuthContext.Provider>
   );

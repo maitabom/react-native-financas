@@ -7,6 +7,7 @@ export interface AuthProviderProperties {
 
 export interface AuthContextProperties {
   user?: User;
+  signed: boolean;
   loadingAuth: boolean;
   signUp: (name: string, email: string, password: string) => Promise<void>;
 }
