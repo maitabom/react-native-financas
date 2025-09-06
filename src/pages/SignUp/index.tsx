@@ -8,15 +8,20 @@ import {
   SubmitText,
 } from './styles';
 import { AuthContext } from '../../context/AuthContext';
+import { ActivityIndicator } from 'react-native';
 
 export default function SignUp() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  const { user, signUp } = useContext(AuthContext);
+  const { loadingAuth, signUp } = useContext(AuthContext);
 
   async function handledSignUp() {
+    if (nome === '' || email === '' || senha === '') {
+      return;
+    }
+
     await signUp(nome, email, senha);
   }
 
@@ -49,7 +54,11 @@ export default function SignUp() {
         </AreaInput>
 
         <SubmitButton activeOpacity={0.8} onPress={handledSignUp}>
-          <SubmitText>Cadastrar</SubmitText>
+          {loadingAuth ? (
+            <ActivityIndicator size={20} color="#FFF" />
+          ) : (
+            <SubmitText>Cadastrar</SubmitText>
+          )}
         </SubmitButton>
       </Container>
     </Background>
