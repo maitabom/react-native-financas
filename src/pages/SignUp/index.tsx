@@ -39,6 +39,7 @@ export default function SignUp() {
         <AreaInput>
           <Input
             placeholder="Seu e-mail"
+            keyboardType='email-address'
             value={email}
             onChangeText={text => setEmail(text)}
           />
