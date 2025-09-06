@@ -8,6 +8,7 @@ export const AuthContext = createContext<AuthContextProperties>({
   user: undefined,
   signed: false,
   loadingAuth: false,
+  signIn: async () => {},
   signUp: async () => {},
 });
 
@@ -16,6 +17,36 @@ function AuthProvider({ children }: AuthProviderProperties) {
   const [loadingAuth, setLoadingAuth] = useState(false);
 
   const navigation = useNavigation();
+
+  async function signIn(email: string, password: string) {
+    try {
+      setLoadingAuth(true);
+
+      const response = await api.post('/login', { email, password });
+
+      setLoadingAuth(false);
+
+      if (response.status === 200 || response.status === 201) {
+        const { id, name, token } = response.data;
+
+        const data: User = {
+          id,
+          name,
+          token,
+          email,
+        };
+
+        api.defaults.headers.Authorization = `Bearer ${token}`;
+
+        setUser(data);
+      } else {
+        console.warn('Login não realizado', response.status);
+      }
+    } catch (error) {
+      console.error(error);
+      setLoadingAuth(false);
+    }
+  }
 
   async function signUp(name: string, email: string, password: string) {
     try {
@@ -36,7 +67,9 @@ function AuthProvider({ children }: AuthProviderProperties) {
   }
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, loadingAuth, signUp }}>
+    <AuthContext.Provider
+      value={{ signed: !!user, user, loadingAuth, signIn, signUp }}
+    >
       {children}
     </AuthContext.Provider>
   );

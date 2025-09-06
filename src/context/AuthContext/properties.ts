@@ -9,5 +9,6 @@ export interface AuthContextProperties {
   user?: User;
   signed: boolean;
   loadingAuth: boolean;
+  signIn: (email: string, password: string) => Promise<void>;
   signUp: (name: string, email: string, password: string) => Promise<void>;
 }
