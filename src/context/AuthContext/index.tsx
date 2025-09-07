@@ -1,22 +1,57 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { AuthContextProperties, AuthProviderProperties } from './properties';
 import User from '../../models/user';
 import api from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AuthContext = createContext<AuthContextProperties>({
   user: undefined,
   signed: false,
+  loading: false,
   loadingAuth: false,
-  signIn: async () => {},
-  signUp: async () => {},
+  signIn: async () => { },
+  signUp: async () => { },
 });
 
 function AuthProvider({ children }: AuthProviderProperties) {
   const [user, setUser] = useState<User | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
   const [loadingAuth, setLoadingAuth] = useState(false);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    async function loadStorage() {
+      try {
+        const storageUser = await AsyncStorage.getItem('@user.token.finance');
+        if (!storageUser) {
+          setUser(undefined);
+          return;
+        }
+
+        const response = await api.get('/me', {
+          headers: {
+            Authorization: `Bearer ${storageUser}`, // corrigido typo
+          },
+        });
+
+        if (response.status === 200 || response.status === 201) {
+          api.defaults.headers.Authorization = `Bearer ${storageUser}`;
+          const { id, name, email } = response.data;
+          setUser({ id, name, token: storageUser, email });
+        } else {
+          setUser(undefined);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar usuário:', error);
+        setUser(undefined);
+      }
+    }
+
+    loadStorage();
+    setLoading(false);
+  }, []);
 
   async function signIn(email: string, password: string) {
     try {
@@ -35,6 +70,8 @@ function AuthProvider({ children }: AuthProviderProperties) {
           token,
           email,
         };
+
+        await AsyncStorage.setItem('@user.token.finance', token);
 
         api.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -68,7 +105,7 @@ function AuthProvider({ children }: AuthProviderProperties) {
 
   return (
     <AuthContext.Provider
-      value={{ signed: !!user, user, loadingAuth, signIn, signUp }}
+      value={{ signed: !!user, user, loading, loadingAuth, signIn, signUp }}
     >
       {children}
     </AuthContext.Provider>
