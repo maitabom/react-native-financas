@@ -10,8 +10,9 @@ export const AuthContext = createContext<AuthContextProperties>({
   signed: false,
   loading: false,
   loadingAuth: false,
-  signIn: async () => { },
-  signUp: async () => { },
+  signIn: async () => {},
+  signUp: async () => {},
+  signOut: async () => {},
 });
 
 function AuthProvider({ children }: AuthProviderProperties) {
@@ -103,9 +104,23 @@ function AuthProvider({ children }: AuthProviderProperties) {
     }
   }
 
+  async function signOut() {
+    await AsyncStorage.clear().then(() => {
+      setUser(undefined);
+    });
+  }
+
   return (
     <AuthContext.Provider
-      value={{ signed: !!user, user, loading, loadingAuth, signIn, signUp }}
+      value={{
+        signed: !!user,
+        user,
+        loading,
+        loadingAuth,
+        signIn,
+        signUp,
+        signOut,
+      }}
     >
       {children}
     </AuthContext.Provider>
