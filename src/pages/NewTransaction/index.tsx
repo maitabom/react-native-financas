@@ -3,6 +3,7 @@ import Header from '../../components/Header';
 import { Background, Input, SubmitButton, SubmitText } from './styles';
 import { Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { useState } from 'react';
+import TransactionTypes from '../../components/TransactionTypes';
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -34,6 +35,9 @@ export default function NewTransacion() {
             value={valueInput}
             onChangeText={text => setValueInput(text)}
           />
+
+          <TransactionTypes type={type} onTypeChanged={(item) => setType(item)} />
+
           <SubmitButton activeOpacity={0.8}>
             <SubmitText>Registrar</SubmitText>
           </SubmitButton>
