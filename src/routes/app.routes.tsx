@@ -1,6 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Home from '../pages/Home';
 import NewTransacion from '../pages/NewTransaction';
+import Profile from '../pages/Profile';
 
 const AppDrawer = createDrawerNavigator();
 
@@ -18,6 +19,7 @@ function AppRoutes() {
     >
       <AppDrawer.Screen name="Home" component={Home} />
       <AppDrawer.Screen name="Nova transação" component={NewTransacion} />
+      <AppDrawer.Screen name="Perfil do usuário" component={Profile} />
     </AppDrawer.Navigator>
   );
 }
