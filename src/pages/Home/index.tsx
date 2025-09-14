@@ -50,9 +50,23 @@ export default function Home() {
     return () => {
       isActive = false;
     };
-  });
+  }, [dateMoviments, isFocus]);
 
   const listContentContainerStyle = { paddingBottom: 20 };
+
+  async function handleDelete(transactionId: string) {
+    try {
+      await api.delete('/receives/delete', {
+        params: {
+          item_id: transactionId,
+        },
+      });
+
+      setDateMoviments(new Date());
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <Background>
@@ -80,7 +94,7 @@ export default function Home() {
         keyExtractor={(item: Transaction) => item.id}
         contentContainerStyle={listContentContainerStyle}
         renderItem={({ item }: { item: Transaction }) => (
-          <HistoricItemList data={item} />
+          <HistoricItemList data={item} onDelete={handleDelete} />
         )}
       />
     </Background>
