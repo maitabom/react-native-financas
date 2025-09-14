@@ -1,4 +1,4 @@
-export type TypeTransaction = 'receita' | 'despesa';
+import { TypeTransaction } from "../../models/@types";
 
 export interface TransactionTypesProperties {
   type: TypeTransaction;

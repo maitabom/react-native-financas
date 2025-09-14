@@ -3,9 +3,10 @@ import {
   RegisterTypeButton,
   RegisterTypeLabel,
 } from './styles';
-import { TransactionTypesProperties, TypeTransaction } from './properties';
+import { TransactionTypesProperties } from './properties';
 import Feather from '@react-native-vector-icons/feather';
 import { useState } from 'react';
+import { TypeTransaction } from '../../models/@types';
 
 export default function TransactionTypes(
   properties: TransactionTypesProperties,
