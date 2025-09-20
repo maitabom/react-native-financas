@@ -6,15 +6,17 @@ import api from '../../services/api';
 import ResumeTransaction from '../../models/resume-transaction';
 import { useIsFocused } from '@react-navigation/native';
 import BalanceItem from '../../components/BalanceItem';
-import { TouchableOpacity } from 'react-native';
+import { Modal, TouchableOpacity } from 'react-native';
 import Feather from '@react-native-vector-icons/feather';
 import Transaction from '../../models/transaction';
 import HistoricItemList from '../../components/HistoricItemList';
+import CalendarModal from '../../components/CalendarModal';
 
 export default function Home() {
   const [listBalance, setListBalance] = useState<ResumeTransaction[]>([]);
   const [dateMoviments, setDateMoviments] = useState<Date>(new Date());
   const [moviments, setMoviments] = useState<Transaction[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const isFocus = useIsFocused();
 
@@ -68,6 +70,10 @@ export default function Home() {
     }
   }
 
+  function filterDateMoviments(dateSeleced: Date) {
+    setDateMoviments(dateSeleced);
+  }
+
   return (
     <Background>
       <Header title="Minhas movimentações" />
@@ -82,7 +88,7 @@ export default function Home() {
       />
 
       <Area>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Feather name="calendar" color="#121212" size={30} />
         </TouchableOpacity>
         <Title>Últimas movimentações</Title>
@@ -97,6 +103,13 @@ export default function Home() {
           <HistoricItemList data={item} onDelete={handleDelete} />
         )}
       />
+
+      <Modal visible={modalVisible} animationType="fade" transparent={true}>
+        <CalendarModal
+          onSetVisible={() => setModalVisible(false)}
+          onFilter={filterDateMoviments}
+        />
+      </Modal>
     </Background>
   );
 }
