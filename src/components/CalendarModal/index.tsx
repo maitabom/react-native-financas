@@ -7,14 +7,18 @@ import {
   ModalContent,
 } from './styles';
 import { useState } from 'react';
-import { Calendar, DateData } from 'react-native-calendars';
+import { Calendar, DateData, LocaleConfig } from 'react-native-calendars';
 import { MarkedDates } from 'react-native-calendars/src/types';
+import { ptBR } from './locale.calendar';
 
 const styles = StyleSheet.create({
   flexOne: {
     flex: 1,
   },
 });
+
+LocaleConfig.locales['pt-BR'] = ptBR;
+LocaleConfig.defaultLocale = 'pt-BR';
 
 export default function CalendarModal(properties: CalendarModelProperties) {
   const [dateNow, setDateNow] = useState(new Date());
